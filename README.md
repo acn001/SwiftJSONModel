@@ -9,7 +9,7 @@ This version provides following features:<br>
 
 ## Adding SwiftJSONModel to your project
 Currently, SwiftJSONModel should be integrated manually.  Follow these steps:<br>
-1. Download the SwiftJSONModel repository as a zip file or clone it;<br>
+1. Download the SwiftJSONModel repository as a [zip file](https://github.com/acn001/SwiftJSONModel/archive/master.zip) or clone it;<br>
 2. Copy the SwiftJSONModel sub-folder into your Xcode project, and add it to your project.<br>
 
 ## Basic usage
