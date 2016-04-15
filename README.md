@@ -22,7 +22,7 @@ Consider a JSON string like:<br>
 }
 ```
 To model this JSON, you should:<br>
-1. Crate a new class which inherit the SwiftJSONModel class;<br>
+1. Create a new class which inherit the SwiftJSONModel class;<br>
 2. Declare properties with the name of the JSON keys:<br>
 ```Swift
 class Shop: SwiftJSONModel {
