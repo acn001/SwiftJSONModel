@@ -2,12 +2,12 @@
 Data Modelling Framework for JSON in Swift.  Data model classes and instances can be easily created.
 
 ## Release Notes
-Version 0.1.1<br>
-* Bool is support.<br>
-Version 0.1<br>
-* Construct a model instance with a dictionary;<br>
-* Update a model with a dictionary;<br>
-* Convert a model to a dictionary.<br>
+#### Version 0.1.1
+Bool is support.<br>
+#### Version 0.1
+Construct a model instance with a dictionary;<br>
+Update a model with a dictionary;<br>
+Convert a model to a dictionary.<br>
 
 ## Adding SwiftJSONModel to your project
 Currently, SwiftJSONModel should be integrated manually.  Follow these steps:<br>
