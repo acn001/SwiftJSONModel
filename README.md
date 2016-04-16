@@ -38,7 +38,7 @@ class Shop: SwiftJSONModel {
 }
 ```
 Currently， SwiftJSONModel can convert these types automatically in Swift:<br>
-`Int`, `Float`, `Double`, `String` / `NSString`, `NSNumber`, `SwiftJSONModel` or its subclass, and `Array` / `NSArray`.  Remember that `Int, Float, and Double properties cannot be optional`.<br>
+`Bool`, `Int`, `Float`, `Double`, `String` / `NSString`, `NSNumber`, `SwiftJSONModel` or its subclass, and `Array` / `NSArray`.  Remember that `Bool, Int, Float, and Double properties cannot be optional`.<br>
 If you want to use properties of other types，you should add these properties into ignored list.  See Ignored properties in detail.<br>
 3. To construct a model instance from JSON data, you can use following constructor:<br>
 ```Swift
@@ -132,7 +132,7 @@ class BookShop: Shop {
 Remember that in an inheritance system, you should call `super.ignoredProperties()` and merge superclass's ignore list.
 
 #### Model collections
-You should specify the generic types of array collections by method of `func genericTypes() -> [String : String]`.  The valid generic type can be: `Int`, `Float`, `Double`, `String` / `NSString`, `NSNumber`, `SwiftJSONModel` or its subclass.
+You should specify the generic types of array collections by method of `func genericTypes() -> [String : String]`.  The valid generic type can be: `Bool`, `Int`, `Float`, `Double`, `String` / `NSString`, `NSNumber`, `SwiftJSONModel` or its subclass.
 <table>
 <tr>
 <td valign="top">
