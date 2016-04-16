@@ -1,8 +1,10 @@
 # SwiftJSONModel
 Data Modelling Framework for JSON in Swift.  Data model classes and instances can be easily created.
 
-## Version 0.1
-This version provides following features:<br>
+## Release Notes
+Version 0.1.1<br>
+* Bool is support.<br>
+Version 0.1<br>
 * Construct a model instance with a dictionary;<br>
 * Update a model with a dictionary;<br>
 * Convert a model to a dictionary.<br>
@@ -16,6 +18,7 @@ Currently, SwiftJSONModel should be integrated manually.  Follow these steps:<br
 Consider a JSON string like:<br>
 ```JSON
 {
+    "isOpen" : true,
     "shopId" : 200010000,
     "shopName" : "Wisdom Bookshop",
     "shopAddress" : "No 7, Fortune Rd."
@@ -27,6 +30,7 @@ To model this JSON, you should:<br>
 ```Swift
 class Shop: SwiftJSONModel {
 
+    var isOpen: Bool = false
     var shopId: Int = 0
     var shopName: String?
     var shopAddress: String?
@@ -61,6 +65,7 @@ if let JSONData: NSData = /* obtained by Internet */ {
 <td valign="top">
 <pre>
 {
+    "isOpen" : true,
     "shopId" : 200010000,
     "shopName" : "Wisdom Bookshop",
     "shopAddress" : "No 7, Fortune Rd."
@@ -133,6 +138,7 @@ You should specify the generic types of array collections by method of `func gen
 <td valign="top">
 <pre>
 {
+    "isOpen" : true,
     "shopId" : 200010000,
     "shopName" : "Wisdom Bookshop",
     "shopAddress" : "No 7, Fortune Rd."
@@ -182,6 +188,7 @@ Computed properties are supported in SwiftJSONModel.  You can add computed prope
 ```Swift
 class Shop: SwiftJSONModel {
     
+    var isOpen: Bool = false
     var shopId: Int = 0
     var shopName: String?
     var shopAddress: String?
