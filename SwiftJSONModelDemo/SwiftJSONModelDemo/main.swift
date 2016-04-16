@@ -38,10 +38,10 @@ class Shop: SwiftJSONModel {
 
 class BookShop: Shop {
     
-    var commodities: [Commodity]?
+    var books: [Book]?
     
     override func genericTypes() -> [String : String] {
-        var result = ["commodities" : String(Commodity)]
+        var result = ["books" : String(Book)]
         for (k, v) in super.genericTypes() {
             result[k] = v
         }
@@ -50,7 +50,7 @@ class BookShop: Shop {
     
 }
 
-class Commodity: SwiftJSONModel {
+class Book: SwiftJSONModel {
     
     var name: String?
     var price: Int = 0
@@ -61,7 +61,7 @@ let JSONDictionary = [
     "shopId" : 200010000,
     "shopName" : "Wisdom Bookshop",
     "shopAddress" : "No 7, Fortune Rd.",
-    "commodities" : [
+    "books" : [
         [
             "name" : "Data Mining",
             "price" : 825
