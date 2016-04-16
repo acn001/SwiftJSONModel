@@ -136,7 +136,7 @@ You should specify the generic types of array collections by method of `func gen
     "shopId" : 200010000,
     "shopName" : "Wisdom Bookshop",
     "shopAddress" : "No 7, Fortune Rd."
-    "commodities" : [
+    "books" : [
         {
             "name" : "Data Mining",
             "price" : 825
@@ -153,10 +153,10 @@ You should specify the generic types of array collections by method of `func gen
 <pre>
 class BookShop: Shop {
     
-    var commodities: [Commodity]?
+    var books: [Book]?
     
     override func genericTypes() -> [String : String] {
-        var result = ["commodities" : "Commodity"]
+        var result = ["books" : "Book"]
         for (k, v) in super.genericTypes() {
             result[k] = v
         }
@@ -165,7 +165,7 @@ class BookShop: Shop {
     
 }
 
-class Commodity: SwiftJSONModel {
+class Book: SwiftJSONModel {
     
     var name: String?
     var price: Int = 0
