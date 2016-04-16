@@ -2,7 +2,7 @@
 //  SwiftJSONModel.swift
 //  SWiftJSONModel
 //
-//  @version 0.1
+//  @version 0.1.1
 //  @author Zhu Yue(411514124@qq.com)
 //
 //  The MIT License (MIT)

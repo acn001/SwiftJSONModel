@@ -2,7 +2,7 @@
 //  SwiftJSONModel.swift
 //  SWiftJSONModel
 //
-//  @version 0.1
+//  @version 0.1.1
 //  @author Zhu Yue(411514124@qq.com)
 //
 //  The MIT License (MIT)
@@ -17,8 +17,9 @@
 
 import Foundation
 
-private var propertiesOfClasses: [String : [String : String]]?
-private var defaultPropertiesFromNSObject: Set<String>?
+private var propertiesOfClasses: [String : [String : String]] = [String : [String : String]]()
+private var defaultPropertiesFromNSObject: Set<String> = Set<String>()
+private var nonePropertiesClasses: [String] = [String]()
 
 final private class SwiftJSONModelDefaultNSObject: NSObject {
     
@@ -27,26 +28,22 @@ final private class SwiftJSONModelDefaultNSObject: NSObject {
 final class SwiftJSONModelObjcReflection: NSObject {
     
     override class func initialize() {
-        propertiesOfClasses = Dictionary()
-        
-        var set: Set<String> = Set()
         var outCount: UInt32 = 0
         let objcProperties = class_copyPropertyList(SwiftJSONModelDefaultNSObject.self, &outCount)
         for i in 0 ..< outCount {
             let property = objcProperties[Int(i)]
-            let objcPropertyName: UnsafePointer<Int8> = property_getName(property)
+            let objcPropertyName = property_getName(property)
             if objcPropertyName != nil {
-                set.insert(String.fromCString(objcPropertyName)!)
+                defaultPropertiesFromNSObject.insert(String.fromCString(objcPropertyName)!)
             }
             if objcPropertyName != nil {
                 // TODO: Should / Can we free a pointer of UnsafePointer<T>?  If UnsafePointer<T> is equivalent to const void*, we need not free it, even cannot free it.
-//                free(objcPropertyName)
+                //                free(objcPropertyName)
             }
         }
         if (objcProperties != nil) {
             free(objcProperties);
         }
-        defaultPropertiesFromNSObject = set;
     }
     
     class func isClass(aClass: AnyClass, kindOfClass: AnyClass) -> Bool {
@@ -70,37 +67,38 @@ final class SwiftJSONModelObjcReflection: NSObject {
     }
     
     class func isClassWithName(className: String, kindOfClass: AnyClass) -> Bool {
-        if let aClass = (NSClassFromString(className) != nil ? NSClassFromString(className) : NSClassFromString(SwiftJSONModelObjcReflection.getProjectNamespace() + "." + className)) {
+        if let aClass = (NSClassFromString(className) != nil ? NSClassFromString(className) : NSClassFromString(getProjectNamespace() + "." + className)) {
             return isClass(aClass, kindOfClass: kindOfClass)
         } else {
             fatalError("Cannot find \(className) in current project.")
         }
     }
     
-    private class func propertiesOfClass(aClass: AnyClass, inout propertiesOfClasses: [String : [String : String]]?) -> ([String : String]?, NSError?) {
+    private class func propertiesOfClass(aClass: AnyClass, inout propertiesOfClasses: [String : [String : String]]) -> ([String : String]?, NSError?) {
         var clazz: AnyClass = aClass
         let clazzName = NSStringFromClass(clazz)
-        var propertiesOfAClass: [String : String]? = propertiesOfClasses![clazzName]
-        if propertiesOfAClass == nil {
+        if let propertiesOfAClass = propertiesOfClasses[clazzName] {
+            return (propertiesOfAClass, nil)
+        } else {
             if !isClass(aClass, kindOfClass: NSObject.self) {
                 fatalError("\(NSStringFromClass(aClass)) is not kind of NSObject.")
             }
             
-            propertiesOfAClass = [String : String]()
+            var propertiesOfAClass = [String : String]()
             while clazz != NSObject.self {
                 let (properties, error) = declaredPropertiesOfClass(clazz)
                 if error != nil {
                     return (nil, error)
                 } else {
                     for (propertyName, propertyType) in properties! {
-                        propertiesOfAClass![propertyName] = propertyType
+                        propertiesOfAClass[propertyName] = propertyType
                     }
                     clazz = clazz.superclass()!
                 }
             }
-            propertiesOfClasses![clazzName] = propertiesOfAClass!
+            propertiesOfClasses[clazzName] = propertiesOfAClass
+            return (propertiesOfAClass, nil)
         }
-        return (propertiesOfAClass, nil)
     }
     
     class func propertiesOfClass(aClass: AnyClass) -> ([String : String]?, NSError?) {
@@ -110,7 +108,7 @@ final class SwiftJSONModelObjcReflection: NSObject {
     class func declaredPropertiesOfClass(aClass: AnyClass) -> ([String: String]?, NSError?) {
         var properties = [String : String]()
         var outCount: UInt32 = 0
-        let objcProperties: UnsafeMutablePointer<objc_property_t> = class_copyPropertyList(aClass, &outCount)
+        let objcProperties = class_copyPropertyList(aClass, &outCount)
         if objcProperties != nil {
             for i in 0 ..< outCount {
                 let property = objcProperties[Int(i)]
@@ -121,7 +119,7 @@ final class SwiftJSONModelObjcReflection: NSObject {
                     return (nil, error)
                 }
                 
-                let objcPropertyName: UnsafePointer<Int8> = property_getName(property)
+                let objcPropertyName = property_getName(property)
                 if objcPropertyName == nil {
                     let errorMessage = SwiftJSONModelErrorCode.SwiftJSONModelObjcPropertyNameCannotBeReflected.description + "Class: \(NSStringFromClass(aClass))."
                     print(errorMessage)
@@ -142,11 +140,11 @@ final class SwiftJSONModelObjcReflection: NSObject {
 //                    free(objcPropertyName)
                 }
                 
-                if defaultPropertiesFromNSObject!.contains(propertyName!) {
+                if defaultPropertiesFromNSObject.contains(propertyName!) {
                     continue
                 }
                 
-                let objcPropertyType: UnsafeMutablePointer<Int8> = property_copyAttributeValue(property, "T")
+                let objcPropertyType = property_copyAttributeValue(property, "T")
                 if objcPropertyType == nil {
                     let errorMessage = SwiftJSONModelErrorCode.SwiftJSONModelObjcPropertyTypeCannotBeReflected.description + "Class: \(NSStringFromClass(aClass))."
                     print(errorMessage)
@@ -169,8 +167,11 @@ final class SwiftJSONModelObjcReflection: NSObject {
                 free(objcProperties)
             }
         } else {
-            print("Warning: class: \(NSStringFromClass(aClass)) reflects none properties.  This may be noramal, or some of properties cannot be reflected by objc/runtime.  Please check.")
-        }
+            let className = NSStringFromClass(aClass)
+            if !nonePropertiesClasses.contains(className) {
+                print("Warning: class: \(className) reflects none properties.  This may be noramal, or some of properties cannot be reflected by objc/runtime.  Please check.")
+                nonePropertiesClasses.append(className)
+            }        }
         return (properties, nil)
     }
     

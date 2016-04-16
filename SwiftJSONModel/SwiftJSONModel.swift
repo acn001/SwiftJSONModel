@@ -2,7 +2,7 @@
 //  SwiftJSONModel.swift
 //  SWiftJSONModel
 //
-//  @version 0.1
+//  @version 0.1.1
 //  @author Zhu Yue(411514124@qq.com)
 //
 //  The MIT License (MIT)
@@ -40,13 +40,13 @@ class SwiftJSONModel: NSObject {
         let (properties, _) = SwiftJSONModelObjcReflection.propertiesOfClass(self.dynamicType)
         if properties != nil {
             for (propertyName, propertyType) in properties! {
-                if !ignoredProperties().contains(propertyName) && propertyType != "Int" && propertyType != "Float" && propertyType != "Double" && propertyType != "NSString" && propertyType != "NSNumber" && propertyType != "NSArray" && !SwiftJSONModelObjcReflection.isClassWithName(propertyType, kindOfClass: SwiftJSONModel.self) && !SwiftJSONModelObjcReflection.isClassWithName(propertyType, kindOfClass: SwiftJSONModelIgnored.self) {
-                    fatalError("\(NSStringFromClass(self.dynamicType)) has invalid property type, property name: \(propertyName), property type: \(propertyType).  Only Int, Float, Double, String / NSString, NSNumber, NSArray, SwiftJSONModel or its subclass, SwiftJSONModelIgnored or its subclass can be used.")
+                if !ignoredProperties().contains(propertyName) && propertyType != "Int8" && propertyType != "Int" && propertyType != "Float" && propertyType != "Double" && propertyType != "String" && propertyType != "NSString" && propertyType != "NSNumber" && propertyType != "NSArray" && !SwiftJSONModelObjcReflection.isClassWithName(propertyType, kindOfClass: SwiftJSONModel.self) && !SwiftJSONModelObjcReflection.isClassWithName(propertyType, kindOfClass: SwiftJSONModelIgnored.self) {
+                    fatalError("\(NSStringFromClass(self.dynamicType)) has invalid property type, property name: \(propertyName), property type: \(propertyType).  Only Bool, Int, Float, Double, String / NSString, NSNumber, NSArray, SwiftJSONModel or its subclass, SwiftJSONModelIgnored or its subclass can be used.")
                 }
                 if propertyType == "NSArray" {
                     let genericType = getGenericTypeForArrayProperty(propertyName)
-                    if genericType != "Int" && genericType != "Float" && genericType != "Double" && genericType != "NSString" && genericType != "NSNumber" && !SwiftJSONModelObjcReflection.isClassWithName(genericType, kindOfClass: SwiftJSONModel.self) {
-                        fatalError("\(NSStringFromClass(self.dynamicType)) has invalid generic type with its array property, array name: \(propertyName), generic type: \(genericType).  Only Int, Float, Double, String / NSString, NSNumber, SwiftJSONModel or its subclass can be the valid generic type.")
+                    if genericType != "Bool" && genericType != "Int" && genericType != "Float" && genericType != "Double" && genericType != "String" && genericType != "NSString" && genericType != "NSNumber" && !SwiftJSONModelObjcReflection.isClassWithName(genericType, kindOfClass: SwiftJSONModel.self) {
+                        fatalError("\(NSStringFromClass(self.dynamicType)) has invalid generic type with its array property, array name: \(propertyName), generic type: \(genericType).  Only Bool, Int, Float, Double, String / NSString, NSNumber, SwiftJSONModel or its subclass can be the valid generic type.")
                     }
                 }
             }
@@ -75,6 +75,10 @@ class SwiftJSONModel: NSObject {
             for (propertyName, propertyType) in properties! {
                 if !ignoredProperties().contains(propertyName) {
                     switch propertyType {
+                    case "Int8":
+                        if let propertyValue = dictionary[propertyName] as? Bool {
+                            setValue(propertyValue, forKey: propertyName)
+                        }
                     case "Int":
                         if let propertyValue = dictionary[propertyName] as? Int {
                             setValue(propertyValue, forKey: propertyName)
@@ -102,6 +106,10 @@ class SwiftJSONModel: NSObject {
                     case "NSArray":
                         let genericType = getGenericTypeForArrayProperty(propertyName)
                         switch genericType {
+                        case "Bool":
+                            if let propertyValue = dictionary[propertyName] as? [Bool] {
+                                setValue(propertyValue, forKey: propertyName)
+                            }
                         case "Int":
                             if let propertyValue = dictionary[propertyName] as? [Int] {
                                 setValue(propertyValue, forKey: propertyName)
@@ -164,6 +172,10 @@ class SwiftJSONModel: NSObject {
             for (propertyName, propertyType) in properties! {
                 if !ignoredProperties().contains(propertyName) {
                     switch propertyType {
+                    case "Int8":
+                        if let propertyValue = valueForKey(propertyName) as? Bool {
+                            dictionary[propertyName] = propertyValue
+                        }
                     case "Int":
                         if let propertyValue = valueForKey(propertyName) as? Int {
                             dictionary[propertyName] = propertyValue
@@ -191,6 +203,10 @@ class SwiftJSONModel: NSObject {
                     case "NSArray":
                         let genericType = getGenericTypeForArrayProperty(propertyName)
                         switch genericType {
+                        case "Bool":
+                            if let propertyValue = valueForKey(propertyName) as? [Bool] {
+                                dictionary[propertyName] = propertyValue
+                            }
                         case "Int":
                             if let propertyValue = valueForKey(propertyName) as? [Int] {
                                 dictionary[propertyName] = propertyValue

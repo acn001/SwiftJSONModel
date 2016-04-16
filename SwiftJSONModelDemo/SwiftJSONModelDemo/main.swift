@@ -2,7 +2,7 @@
 //  SwiftJSONModel.swift
 //  SWiftJSONModel
 //
-//  @version 0.1
+//  @version 0.1.1
 //  @author Zhu Yue(411514124@qq.com)
 //
 //  The MIT License (MIT)
@@ -19,6 +19,7 @@ import Foundation
 
 class Shop: SwiftJSONModel {
     
+    var isOpen: Bool = false
     var shopId: Int = 0
     var shopName: String?
     var shopAddress: String?
@@ -58,6 +59,7 @@ class Book: SwiftJSONModel {
 }
 
 let JSONDictionary = [
+    "isOpen" : true,
     "shopId" : 200010000,
     "shopName" : "Wisdom Bookshop",
     "shopAddress" : "No 7, Fortune Rd.",
