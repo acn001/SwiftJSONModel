@@ -28,11 +28,7 @@ class Shop: SwiftJSONModel {
     }
     
     override func ignoredProperties() -> [String] {
-        var result = ["isOldShop"]
-        for item in super.ignoredProperties() {
-            result.append(item)
-        }
-        return result
+        return super.ignoredProperties() + ["isOldShop"]
     }
     
 }
