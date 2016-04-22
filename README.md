@@ -120,11 +120,7 @@ class BookShop: Shop {
     var shopLogo: UIImage?
     
     override func ignoredProperties() -> [String] {
-        var result = ["shopLogo"]
-        for item in super.ignoredProperties() {
-            result.append(item)
-        }
-        return result
+        return super.ignoredProperties() + ["shopLogo"]
     }
     
 }
@@ -197,11 +193,7 @@ class Shop: SwiftJSONModel {
     }
     
     override func ignoredProperties() -> [String] {
-        var result = ["isOldShop"]
-        for item in super.ignoredProperties() {
-            result.append(item)
-        }
-        return result
+        return super.ignoredProperties() + ["isOldShop"]
     }
     
 }
